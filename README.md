@@ -20,6 +20,11 @@ This project demonstrates custom game loop mechanics, 2D array physics, and memo
 * `D` - Move Right
 * `Q` - Quit Game
 
+## GamePlay 
+
+<img width="1153" height="594" alt="image" src="https://github.com/user-attachments/assets/f1b3971f-6c87-45c6-a9ab-ce7169b7defa" />
+
+
 ## Getting Started
 
 ### Prerequisites
