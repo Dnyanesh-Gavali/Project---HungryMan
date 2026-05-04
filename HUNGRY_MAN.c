@@ -105,6 +105,10 @@ void spawn_character(character *c) {
 //--------- main ------------
 int main() {
     
+
+    // system("title HUNGRY MAN");
+
+    // system("mode con: cols=75 lines=25");
     // Setup Console
     // setvbuf(stdout, NULL, _IONBF, 0);
     printf("\033[?25l"); // Hide Cursor
@@ -141,7 +145,7 @@ int main() {
     int collision_detected = 0;
     
     spawn_character(&food);
-    int eat;
+    int eat = 0;
 
 
 
@@ -256,48 +260,40 @@ int main() {
             // RENDERING (Draw Map + Entities)
             printf("\033[H"); // Move cursor to top-left
             
-            // Output buffer for single printf (Optional optimization, strictly confusing so we print char by char)
+            char screen_buffer[height][width+1];
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
-                    
-                    // Priority 1: Ghosts
-                    int is_ghost = 0;
-                    for(int i=0; i<ghost_no; i++) {
-                        if (ghosts[i].x == x && ghosts[i].y == y) {
-                            printf("\033[1;31m%c\033[0m", ghosts[i].symbol); // Red Ghost
-                            is_ghost = 1;
-                            break;
-                        }
-                    }
-                    if (is_ghost) continue;
-
-                    // Priority 2: Player
-                    if (player.x == x && player.y == y) {
-                        printf("\033[1;32m%c\033[0m", player.symbol); // Green Player
-                        continue;
-                    }
-
-                    // Priority 3: food
-                    if (eat ==0) {
-                        if (food.x == x && food.y == y) {
-                            printf("\x1b[0;95m%c\x1b[0m", food.symbol); // Green Player
-                            continue;
-                        }
-                    }
-
-
-                    // Priority 4: Map
                     switch (map[y][x]) {
-                        case 1: printf("-"); break;
-                        case 2: printf("|"); break;
-                        default:     printf(" "); break;
+                        case 1: screen_buffer[y][x] = '-';
+                                break;
+
+                        case 2: screen_buffer[y][x] = '|';
+                                break;
+
+                        default: screen_buffer[y][x] = ' '; 
+                                 break;
                     }
                 }
-                printf("\n");
+                screen_buffer[y][width] = '\0';
             }
-            
-            printf("score: %d", score);
-            Sleep(20);
+
+            if (eat == 0) {
+                screen_buffer[food.y][food.x] = food.symbol;
+            }
+
+            for(int i = 0; i < ghost_no; i++) {
+                screen_buffer[ghosts[i].y][ghosts[i].x] = ghosts[i].symbol;
+            }
+
+            screen_buffer[player.y][player.x] = player.symbol;
+
+            for (int y = 0; y < height; y++) {
+                printf("%s\n", screen_buffer[y]); 
+            }
+
+            printf("Score: %d\n", score);
+            Sleep(100);
+
         }
     printf("\033[?25h"); // Show cursor
     system("pause");
