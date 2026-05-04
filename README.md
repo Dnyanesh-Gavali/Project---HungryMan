@@ -1,4 +1,4 @@
-# Hungry Man
+# Hungry Man --V 1.10
 
 A terminal-based arcade game, built entirely in standard C. 
 
